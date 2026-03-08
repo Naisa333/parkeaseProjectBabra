@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parkease — Daily Reports</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    :root {
+      --brand: #1f4e79;
+      --brand-2: #06477c;
+      --surface: rgba(255, 255, 255, 0.88);
+      --text: #1c2531;
+      --muted: #556073;
+      --shadow: 0 18px 40px rgba(25, 40, 70, 0.18);
+      --border: rgba(31, 78, 121, 0.18);
+      --success: #1f8a4c;
+      --danger: #c42b2b;
+      --gradient-1: #0b1741;
+      --gradient-2: #0c244a;
+      --gradient-3: #122c54;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    @keyframes float {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, var(--gradient-2), var(--gradient-1), var(--gradient-3));
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 18px 22px;
+      background: rgba(255, 255, 255, 0.82);
+      border-bottom: 1px solid rgba(31, 78, 121, 0.22);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .logo {
+      font-weight: 700;
+      color: var(--brand);
+      letter-spacing: 0.5px;
+      font-size: 1.1rem;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.9px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .actions button {
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: transform 120ms ease, box-shadow 120ms ease;
+    }
+
+    .actions button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 20px rgba(25, 40, 70, 0.12);
+    }
+
+    .actions .btn-primary {
+      background: var(--brand);
+      color: white;
+    }
+
+    .actions .btn-secondary {
+      background: rgba(31, 78, 121, 0.14);
+      color: var(--brand);
+    }
+
+    .actions .btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    main {
+      flex: 1;
+      padding: 22px;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      display: grid;
+      gap: 18px;
+    }
+
+    .overview {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .date-picker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(31, 78, 121, 0.25);
+      border-radius: 14px;
+      padding: 10px 14px;
+    }
+
+    .date-picker button {
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 10px;
+      transition: background 120ms ease;
+    }
+
+    .date-picker button:hover {
+      background: rgba(31, 78, 121, 0.12);
+    }
+
+    .date-picker span {
+      font-weight: 700;
+      color: var(--brand);
+      min-width: 160px;
+      text-align: center;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(31, 78, 121, 0.14);
+    }
+
+    .card__title {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--muted);
+      letter-spacing: 0.4px;
+    }
+
+    .card__value {
+      margin: 10px 0 0;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--brand);
+    }
+
+    .card__change {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+    }
+
+    .card__change span {
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.78rem;
+    }
+
+    .card__change .up {
+      background: rgba(31, 170, 111, 0.16);
+      color: #127741;
+    }
+
+    .card__change .down {
+      background: rgba(209, 64, 64, 0.16);
+      color: #b21d1d;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 18px;
+      padding: 18px;
+      border: 1px solid rgba(31, 78, 121, 0.14);
+      box-shadow: var(--shadow);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 720px;
+    }
+
+    th,
+    td {
+      padding: 12px 14px;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    th {
+      background: rgba(31, 78, 121, 0.08);
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    tr:not(:last-child) {
+      border-bottom: 1px solid rgba(31, 78, 121, 0.1);
+    }
+
+    .search-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 0;
+    }
+
+    .search-row input {
+      width: 320px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(31, 78, 121, 0.25);
+      outline: none;
+      font-size: 0.9rem;
+    }
+
+    .pagination {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-end;
+      margin-top: 14px;
+    }
+
+    .pagination button {
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(31, 78, 121, 0.2);
+      background: rgba(255, 255, 255, 0.92);
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--brand);
+    }
+
+    .pagination button.active {
+      background: var(--brand);
+      color: white;
+      border-color: var(--brand);
+    }
+
+    .grand-total {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(31, 78, 121, 0.14);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+    }
+
+    .grand-total span {
+      font-weight: 700;
+      color: var(--brand);
+    }
+
+    footer {
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.2);
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 0.8rem;
+    }
+
+    footer .brand {
+      font-weight: 700;
+      letter-spacing: 0.8px;
+    }
+
+    @media (max-width: 960px) {
+      .overview {
+        grid-template-columns: 1fr;
+      }
+
+      .date-picker {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .search-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .search-row input {
+        width: 100%;
+      }
+
+      .pagination {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <div class="logo">Parkease</div>
+      <div class="subtitle">DAILY REPORTS</div>
+      <nav class="nav">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="register.html">Register</a>
+        <a href="signout.html">Sign out</a>
+      </nav>
+    </div>
+    <div class="actions">
+      <button class="btn btn-secondary" id="downloadPdf">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 9h-4V3H9v6H5l7 8 7-8zm-7 11v-2h-4v2h4zm6-11v2h-2V9h2z"/></svg>
+        Download PDF
+      </button>
+      <button class="btn btn-secondary" id="exportCsv">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 14H7v-2h10v2zm0-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        Export CSV
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="overview">
+      <div class="date-picker">
+        <button id="prevDay" aria-label="Previous day">◀</button>
+        <span id="currentDate">March 7, 2026</span>
+        <button id="nextDay" aria-label="Next day">▶</button>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <div class="card__title">Parking revenue</div>
+          <div class="card__value" id="cardRevenue">UGX 0</div>
+          <div class="card__change"><span class="up" id="changeRevenue">+0%</span> vs yesterday</div>
+        </div>
+        <div class="card">
+          <div class="card__title">Tyre clinic</div>
+          <div class="card__value" id="cardTyre">UGX 0</div>
+          <div class="card__change"><span class="up" id="changeTyre">+0%</span> vs yesterday</div>
+        </div>
+        <div class="card">
+          <div class="card__title">Battery hire</div>
+          <div class="card__value" id="cardBattery">UGX 0</div>
+          <div class="card__change"><span class="up" id="changeBattery">+0%</span> vs yesterday</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="table-wrapper">
+      <div class="search-row">
+        <div>
+          <strong>All signed-out vehicles</strong>
+        </div>
+        <input id="tableSearch" placeholder="Search by receipt or plate" />
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Receipt #</th>
+            <th>Plate #</th>
+            <th>In-time</th>
+            <th>Out-time</th>
+            <th>Duration</th>
+            <th>Fee</th>
+          </tr>
+        </thead>
+        <tbody id="reportRows"></tbody>
+      </table>
+
+      <div class="pagination" id="pagination"></div>
+
+      <div class="grand-total">
+        <span>Daily grand total</span>
+        <span id="grandTotal">UGX 0</span>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="brand">ADMIN CONTROL PANEL</div>
+    <div>&copy; 2026 Parkease</div>
+  </footer>
+
+  <script src="reports.js"></script>
+</body>
+</html>

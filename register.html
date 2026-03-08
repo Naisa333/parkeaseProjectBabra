@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parkease — Vehicle Registration</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    :root {
+      --brand: #1f4e79;
+      --brand-2: #06477c;
+      --surface: rgba(255, 255, 255, 0.88);
+      --text: #1c2531;
+      --muted: #556073;
+      --danger: #c42b2b;
+      --shadow: 0 18px 40px rgba(25, 40, 70, 0.18);
+      --border: rgba(31, 78, 121, 0.18);
+      --gradient-1: #0b1741;
+      --gradient-2: #0c244a;
+      --gradient-3: #122c54;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    @keyframes float {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, var(--gradient-2), var(--gradient-1), var(--gradient-3));
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 22px;
+      gap: 18px;
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(31, 78, 121, 0.22);
+    }
+
+    .logo {
+      font-weight: 700;
+      color: var(--brand);
+      letter-spacing: 0.5px;
+      font-size: 1.1rem;
+    }
+
+    nav {
+      display: flex;
+      gap: 12px;
+    }
+
+    nav a {
+      color: rgba(25, 40, 70, 0.82);
+      padding: 10px 14px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 130ms ease;
+    }
+
+    nav a:hover {
+      background: rgba(31, 78, 121, 0.12);
+    }
+
+    nav a.active {
+      background: rgba(31, 78, 121, 0.18);
+      color: var(--brand-2);
+    }
+
+    .profile {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    main {
+      flex: 1;
+      padding: 22px 24px 40px;
+      max-width: 960px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .heading {
+      margin: 0 0 18px;
+      font-size: 1.7rem;
+      color: white;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      padding: 18px 18px 20px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(31, 78, 121, 0.14);
+    }
+
+    .card h2 {
+      margin: 0 0 12px;
+      font-size: 1.1rem;
+      color: var(--brand);
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(31, 78, 121, 0.25);
+      font-size: 0.95rem;
+      background: #fafbff;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(31, 78, 121, 0.14);
+    }
+
+    .hint {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .error {
+      color: var(--danger);
+      font-size: 0.8rem;
+      margin-top: 6px;
+      display: none;
+    }
+
+    .error.show {
+      display: block;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 120ms ease, box-shadow 120ms ease;
+      min-width: 140px;
+    }
+
+    .btn-primary {
+      background: var(--brand);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: rgba(31, 78, 121, 0.14);
+      color: var(--brand);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 20px rgba(25, 40, 70, 0.12);
+    }
+
+    .floating {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      width: 240px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(31, 78, 121, 0.14);
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+
+    .floating h3 {
+      margin: 0 0 8px;
+      font-size: 0.95rem;
+      color: var(--brand);
+    }
+
+    footer {
+      padding: 14px 18px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.75);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .footer-line {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .input-group {
+      position: relative;
+    }
+
+    .input-group-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(31, 78, 121, 0.6);
+      font-weight: 700;
+      pointer-events: none;
+    }
+
+    .input-with-icon input {
+      padding-left: 30px;
+    }
+
+    @media (max-width: 680px) {
+      main {
+        padding: 20px 18px 40px;
+      }
+
+      .floating {
+        width: calc(100% - 36px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Parkease</div>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="register.html" class="active">Registration</a>
+      <a href="reports.html">Reports</a>
+      <a href="signout.html">Sign out</a>
+    </nav>
+    <div class="profile" id="profileInfo">User</div>
+  </header>
+
+  <main>
+    <h1 class="heading">Vehicle Registration</h1>
+
+    <div class="row">
+      <section class="card">
+        <h2>Driver information</h2>
+        <div class="field">
+          <label for="driverName">Driver name</label>
+          <input id="driverName" type="text" placeholder="e.g. Peter Okello" />
+          <div class="hint">Start with a capital letter. No numbers.</div>
+          <div class="error" id="driverNameError"></div>
+        </div>
+
+        <div class="field">
+          <label for="phone">Phone number</label>
+          <input id="phone" type="tel" placeholder="+256 700 000000" />
+          <div class="hint">Uganda format: +256XXXXXXXXX or 07XX/06XX.</div>
+          <div class="error" id="phoneError"></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Vehicle information</h2>
+        <div class="field">
+          <label for="vehicleType">Vehicle type</label>
+          <select id="vehicleType">
+            <option value="">Select a type</option>
+            <option value="truck">Truck</option>
+            <option value="personal">Personal car</option>
+            <option value="taxi">Taxi</option>
+            <option value="coaster">Coaster</option>
+            <option value="boda">Boda-boda</option>
+          </select>
+          <div class="error" id="vehicleTypeError"></div>
+        </div>
+
+        <div class="field input-with-icon">
+          <label for="numberPlate">Number plate</label>
+          <span class="input-group-icon">#</span>
+          <input id="numberPlate" type="text" placeholder="UBA 123X" />
+          <div class="hint">Starts with U, max 7 chars total, alphanumeric.</div>
+          <div class="error" id="numberPlateError"></div>
+        </div>
+
+        <div class="field">
+          <label for="vehicleModel">Vehicle model + color</label>
+          <input id="vehicleModel" type="text" placeholder="e.g. Toyota Prado – White" />
+          <div class="error" id="vehicleModelError"></div>
+        </div>
+
+        <div class="field" id="ninField" style="display: none;">
+          <label for="nin">NIN number</label>
+          <input id="nin" type="text" placeholder="e.g. CM12345678" />
+          <div class="hint">Required for boda-boda. Starts with CM/CF then letters/numbers.</div>
+          <div class="error" id="ninError"></div>
+        </div>
+
+        <div class="buttons">
+          <button type="button" class="btn btn-secondary" id="clearBtn">Clear form</button>
+          <button type="button" class="btn btn-primary" id="submitBtn">Register</button>
+        </div>
+
+        <div class="field" style="margin-top: 14px;">
+          <label for="receipt">Receipt number</label>
+          <input id="receipt" type="text" readonly placeholder="Register to generate" />
+        </div>
+
+        <div class="buttons" style="margin-top: 8px; justify-content: flex-start;">
+          <button type="button" class="btn btn-secondary" id="printBtn">Print receipt</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <aside class="floating" aria-label="Quick tips">
+    <h3>Quick tips</h3>
+    <ul>
+      <li><strong>Ctrl + Enter</strong> = Register</li>
+      <li><strong>Esc</strong> = Clear form</li>
+      <li>Use <strong>Tab</strong> to move fields</li>
+    </ul>
+  </aside>
+
+  <footer>
+    <div class="footer-line">
+      <span>System v1.0</span>
+      <span id="sessionInfo">Session started: --</span>
+    </div>
+  </footer>
+
+  <script src="register.js"></script>
+</body>
+</html>

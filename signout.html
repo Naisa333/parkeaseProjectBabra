@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parkease — Sign out</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    :root {
+      --brand: #1f4e79;
+      --brand-2: #06477c;
+      --surface: rgba(255, 255, 255, 0.88);
+      --text: #1c2531;
+      --muted: #556073;
+      --shadow: 0 18px 40px rgba(25, 40, 70, 0.18);
+      --danger: #c42b2b;
+      --success: #1f8a4c;
+      --blue: #0b6dcc;
+      --border: rgba(31, 78, 121, 0.18);
+      --gradient-1: #0b1741;
+      --gradient-2: #0c244a;
+      --gradient-3: #122c54;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    @keyframes float {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, var(--gradient-2), var(--gradient-1), var(--gradient-3));
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 22px;
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(31, 78, 121, 0.22);
+      gap: 18px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex: 1;
+    }
+
+    .logo {
+      font-weight: 700;
+      color: var(--brand);
+      letter-spacing: 0.5px;
+      font-size: 1.1rem;
+    }
+
+    .nav {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex: 1;
+    }
+
+    .nav a {
+      color: var(--brand-2);
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 12px;
+      transition: background 120ms ease;
+    }
+
+    .nav a:hover {
+      background: rgba(31, 78, 121, 0.12);
+    }
+
+    .search {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(31, 78, 121, 0.25);
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+
+    .search input {
+      border: none;
+      outline: none;
+      font-size: 0.95rem;
+      width: 210px;
+      background: transparent;
+    }
+
+    .search button {
+      border: none;
+      padding: 8px 12px;
+      border-radius: 12px;
+      background: var(--brand);
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    main {
+      flex: 1;
+      padding: 22px;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 18px;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .panel {
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(31, 78, 121, 0.14);
+    }
+
+    .panel h2 {
+      margin: 0 0 12px;
+      font-size: 1.1rem;
+      color: var(--brand);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.82rem;
+    }
+
+    .badge--pending {
+      background: rgba(255, 165, 0, 0.17);
+      color: #994e00;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(31, 78, 121, 0.22);
+      background: #fafbff;
+      outline: none;
+      font-size: 0.95rem;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(31, 78, 121, 0.16);
+    }
+
+    .details {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .details p {
+      margin: 0;
+      font-size: 0.92rem;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .details p span:first-child {
+      color: var(--muted);
+    }
+
+    .highlight {
+      background: rgba(11, 109, 204, 0.12);
+      border-left: 4px solid var(--blue);
+      padding: 10px 12px;
+      border-radius: 12px;
+      margin-top: 12px;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .row .field {
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 120ms ease, box-shadow 120ms ease;
+    }
+
+    .btn-primary {
+      background: var(--brand);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: rgba(31, 78, 121, 0.14);
+      color: var(--brand);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 20px rgba(25, 40, 70, 0.12);
+    }
+
+    .receipt {
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 18px;
+      padding: 18px;
+      border: 1px solid rgba(31, 78, 121, 0.14);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      height: fit-content;
+    }
+
+    .receipt__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .receipt__title {
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--brand);
+    }
+
+    .receipt__print {
+      border: none;
+      background: rgba(11, 109, 204, 0.16);
+      color: var(--blue);
+      border-radius: 12px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .receipt__rows {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .receipt__row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+    }
+
+    .receipt__label {
+      color: var(--muted);
+    }
+
+    .receipt__value {
+      font-weight: 700;
+      text-align: right;
+    }
+
+    .receipt__total {
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(31, 78, 121, 0.12);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .scan {
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px dashed rgba(31, 78, 121, 0.35);
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 960px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <div class="logo">Parkease</div>
+      <nav class="nav">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="register.html">Register</a>
+        <a href="reports.html">Reports</a>
+      </nav>
+      <div class="search">
+        <input id="searchInput" placeholder="Search receipt by ID or plate number" aria-label="Search receipt" />
+        <button id="searchBtn">Search</button>
+      </div>
+    </div>
+    <div class="actions">
+      <a href="reports.html" class="btn btn-secondary" style="text-decoration:none;">View reports</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="panel" aria-label="Vehicle and arrival details">
+      <h2>Vehicle &amp; Arrival</h2>
+      <div class="row">
+        <div class="field">
+          <label>Driver name</label>
+          <div id="detailDriver">—</div>
+        </div>
+        <div class="field">
+          <label>Vehicle type</label>
+          <div id="detailType">—</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>Arrival time</label>
+          <div id="detailArrival">—</div>
+        </div>
+        <div class="field">
+          <label>Duration</label>
+          <div id="detailDuration">—</div>
+        </div>
+      </div>
+      <div class="highlight">
+        <p style="margin:0; font-weight:700;">Parking fee</p>
+        <p id="detailFee" style="margin: 6px 0 0; font-size: 1.4rem; color: var(--blue); font-weight: 700;">UGX 0</p>
+      </div>
+      <div style="margin-top: 14px;">
+        <span class="badge badge--pending">A PENDING SIGN-OUT</span>
+      </div>
+
+      <div style="margin-top: 18px;">
+        <h2>Receiver information</h2>
+        <div class="field">
+          <label for="receiverName">Full name</label>
+          <input id="receiverName" type="text" placeholder="Receiver full name" />
+        </div>
+        <div class="field">
+          <label for="receiverPhone">Phone number</label>
+          <input id="receiverPhone" type="tel" placeholder="+256700000000" />
+        </div>
+        <div class="field">
+          <label for="receiverNin">NIN number</label>
+          <input id="receiverNin" type="text" placeholder="CM12345678" />
+        </div>
+        <div class="field">
+          <label for="receiverGender">Gender</label>
+          <select id="receiverGender">
+            <option value="">Select gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="actions">
+          <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
+          <button class="btn btn-primary" id="confirmBtn">Confirm payment & sign out</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="receipt" aria-label="Receipt preview">
+      <div class="receipt__header">
+        <h3 class="receipt__title">Receipt preview</h3>
+        <button class="receipt__print" id="printBtn">Print</button>
+      </div>
+
+      <div class="receipt__rows">
+        <div class="receipt__row"><span class="receipt__label">Receipt no.</span><span class="receipt__value" id="rcptNo">—</span></div>
+        <div class="receipt__row"><span class="receipt__label">Date</span><span class="receipt__value" id="rcptDate">—</span></div>
+        <div class="receipt__row"><span class="receipt__label">Plate number</span><span class="receipt__value" id="rcptPlate">—</span></div>
+        <div class="receipt__row"><span class="receipt__label">Category</span><span class="receipt__value" id="rcptCategory">—</span></div>
+        <div class="receipt__row"><span class="receipt__label">Check in</span><span class="receipt__value" id="rcptCheckin">—</span></div>
+        <div class="receipt__row"><span class="receipt__label">Duration</span><span class="receipt__value" id="rcptDuration">—</span></div>
+        <div class="receipt__row"><span class="receipt__label">Total</span><span class="receipt__value" id="rcptTotal">UGX 0</span></div>
+        <div class="receipt__row"><span class="receipt__label">Receiver</span><span class="receipt__value" id="rcptReceiver">—</span></div>
+        <div class="receipt__row"><span class="receipt__label">Receiver phone</span><span class="receipt__value" id="rcptReceiverPhone">—</span></div>
+        <div class="receipt__row"><span class="receipt__label">Receiver NIN</span><span class="receipt__value" id="rcptReceiverNin">—</span></div>
+      </div>
+
+      <div class="scan" aria-label="Scan to verify">Scan to verify (placeholder)</div>
+    </div>
+  </main>
+
+  <script src="signout.js"></script>
+</body>
+</html>
